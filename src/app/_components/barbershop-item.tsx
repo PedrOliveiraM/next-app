@@ -5,11 +5,10 @@ import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { StarIcon } from 'lucide-react'
 import Link from 'next/link'
-
 interface BarbershopItemProps {
   barbershop: Barbershop
 }
-const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
+const BarbershopItem = async ({ barbershop }: BarbershopItemProps) => {
   return (
     <Card className="min-w-[167px] rounded-2xl">
       <CardContent className="p-0 px-1 pt-1">
