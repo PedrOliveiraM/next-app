@@ -1,4 +1,5 @@
 import BarbershopServiceItem from '@/app/_components/barbershop-service-item'
+import PhoneItem from '@/app/_components/phone-item'
 import { Button } from '@/app/_components/ui/button'
 import { db } from '@/app/_lib/prisma'
 import { ChevronLeft, MapPinIcon, MenuIcon, StarIcon } from 'lucide-react'
@@ -16,7 +17,6 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
       id: params.id,
     },
   })
-
   const services = await db.barbershopServices.findMany({
     where: { barbershopId: params.id },
   })
@@ -26,6 +26,7 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
   }
   return (
     <>
+      {/** IMAGEM */}
       <div className="relative h-[250px] w-full">
         <Image
           alt={barbershop.name}
@@ -48,7 +49,7 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           <MenuIcon />
         </Button>
       </div>
-      {/** Name End e avaliação */}
+      {/** TITULO */}
       <div className="flex flex-col border-b border-solid px-5 pb-6 pt-3">
         <h1 className="text-xl font-bold">{barbershop.name}</h1>
         <div className="mt-3 flex flex-col gap-2">
@@ -62,7 +63,7 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           </div>
         </div>
       </div>
-      {/** Sobre */}
+      {/** SOBRE */}
       <div className="mt-6 flex flex-col border-b border-solid px-5">
         <h2 className="text-base font-semibold uppercase text-gray-400">
           sobre nós
@@ -74,8 +75,7 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           molestiae dignissimos fugiat repudiandae!
         </p>
       </div>
-
-      {/** SERVIÇOS DA BARBEARIA */}
+      {/** SERVIÇOS */}
       <div className="p-5">
         <h2 className="mb-3 text-base font-semibold uppercase text-gray-400">
           SERVIÇOS
@@ -86,6 +86,16 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
               key={service.id}
               barbershopService={service}
             />
+          ))}
+        </div>
+      </div>
+      <div className="space-y-3 p-5">
+        <h2 className="text-base font-semibold uppercase text-gray-400">
+          CONTATO
+        </h2>
+        <div className="space-y-4">
+          {barbershop.phones.map((phone) => (
+            <PhoneItem key={phone} phone={phone} />
           ))}
         </div>
       </div>
