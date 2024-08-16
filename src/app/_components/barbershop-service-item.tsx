@@ -1,7 +1,8 @@
 import { BarbershopServices } from '@prisma/client'
+import Image from 'next/image'
 import { Button } from './ui/button'
 import { Card, CardContent } from './ui/card'
-import Image from 'next/image'
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from './ui/sheet'
 
 interface BarbershopServiceItemProps {
   barbershopService: BarbershopServices
@@ -37,9 +38,17 @@ const BarbershopServiceItem = ({
                   currency: 'BRL',
                 }).format(Number(barbershopService.price))}
               </p>
-              <Button variant="secondary" size="sm">
-                Reservar
-              </Button>
+
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="secondary" size="sm">
+                    Reservar
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader></SheetHeader>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </CardContent>

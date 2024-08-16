@@ -89,6 +89,7 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           ))}
         </div>
       </div>
+      {/** CONTATO */}
       <div className="space-y-3 p-5">
         <h2 className="text-base font-semibold uppercase text-gray-400">
           CONTATO
