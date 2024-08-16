@@ -1,6 +1,8 @@
 import BarbershopServiceItem from '@/app/_components/barbershop-service-item'
 import PhoneItem from '@/app/_components/phone-item'
+import SidebarSheet from '@/app/_components/sidebar-sheet'
 import { Button } from '@/app/_components/ui/button'
+import { Sheet, SheetTrigger } from '@/app/_components/ui/sheet'
 import { db } from '@/app/_lib/prisma'
 import { ChevronLeft, MapPinIcon, MenuIcon, StarIcon } from 'lucide-react'
 import Image from 'next/image'
@@ -11,6 +13,7 @@ interface BarbershopPropsDto {
     id: string
   }
 }
+
 const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
   const barbershop = await db.barbershop.findUnique({
     where: {
@@ -24,6 +27,7 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
   if (!barbershop) {
     throw new Error('BarberShop is not found')
   }
+
   return (
     <>
       {/** IMAGEM */}
@@ -34,21 +38,31 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           fill
           className="object-cover"
         />
-
-        <Button variant={'secondary'} className="absolute left-4 top-4" asChild>
-          <Link href={'/'}>
+        <Button
+          variant="secondary"
+          className="absolute left-4 top-4"
+          asChild
+          size={'icon'}
+        >
+          <Link href="/">
             <ChevronLeft />
           </Link>
         </Button>
 
-        <Button
-          variant={'secondary'}
-          className="absolute right-4 top-4"
-          asChild
-        >
-          <MenuIcon />
-        </Button>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              size={'icon'}
+              variant={'outline'}
+              className="absolute right-4 top-4"
+            >
+              <MenuIcon />
+            </Button>
+          </SheetTrigger>
+          <SidebarSheet />
+        </Sheet>
       </div>
+
       {/** TITULO */}
       <div className="flex flex-col border-b border-solid px-5 pb-6 pt-3">
         <h1 className="text-xl font-bold">{barbershop.name}</h1>
@@ -63,10 +77,11 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           </div>
         </div>
       </div>
+
       {/** SOBRE */}
       <div className="mt-6 flex flex-col border-b border-solid px-5">
         <h2 className="text-base font-semibold uppercase text-gray-400">
-          sobre nós
+          Sobre nós
         </h2>
         <p className="pb-6 pt-3 text-sm">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam
@@ -75,10 +90,11 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           molestiae dignissimos fugiat repudiandae!
         </p>
       </div>
+
       {/** SERVIÇOS */}
       <div className="p-5">
         <h2 className="mb-3 text-base font-semibold uppercase text-gray-400">
-          SERVIÇOS
+          Serviços
         </h2>
         <div className="space-y-3">
           {services.map((service) => (
@@ -89,10 +105,11 @@ const BarbershopPage = async ({ params }: BarbershopPropsDto) => {
           ))}
         </div>
       </div>
+
       {/** CONTATO */}
       <div className="space-y-3 p-5">
         <h2 className="text-base font-semibold uppercase text-gray-400">
-          CONTATO
+          Contato
         </h2>
         <div className="space-y-4">
           {barbershop.phones.map((phone) => (
