@@ -1,15 +1,27 @@
 'use client'
-import { BarbershopServices } from '@prisma/client'
+import { Barbershop, BarbershopServices } from '@prisma/client'
+import { set } from 'date-fns'
+import { format } from 'date-fns/format'
 import { ptBR } from 'date-fns/locale/pt-BR'
 import Image from 'next/image'
 import { useState } from 'react'
+import { toast } from 'sonner'
+import { createBooking } from '../_actions/create-booking'
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import { Card, CardContent } from './ui/card'
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from './ui/sheet'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTrigger,
+} from './ui/sheet'
 
 interface BarbershopServiceItemProps {
   barbershopService: BarbershopServices
+  barbershop: Pick<Barbershop, 'name'>
 }
 
 const hoursList = [
@@ -33,18 +45,45 @@ const hoursList = [
 
 const BarbershopServiceItem = ({
   barbershopService,
+  barbershop,
 }: BarbershopServiceItemProps) => {
+  // const { data } = useSession()
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
   )
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
 
+  /* SELECIONAR A HORA */
   const handleSelectedTime = (hour: string | undefined) => {
     setSelectedTime(hour)
   }
 
+  /* SELECIONAR O DIA */
   const handleSelectedDay = (date: Date | undefined) => {
     setSelectedDay(date)
+  }
+
+  const handleSubmit = async () => {
+    try {
+      if (!selectedDay || !selectedTime) return
+
+      const hour = Number(selectedTime.split(':')[0])
+      const minute = Number(selectedTime.split(':')[1])
+
+      const newDate = set(selectedDay, {
+        hours: hour,
+        minutes: minute,
+      })
+
+      await createBooking({
+        serviceId: barbershopService.id,
+        userId: 'clzx7w4zt0001c1rv29zkk97f',
+        date: newDate,
+      })
+      toast.success('Reserva criada com sucesso')
+    } catch (error) {
+      toast.error('Erro ao criar reserva' + error)
+    }
   }
 
   return (
@@ -133,36 +172,50 @@ const BarbershopServiceItem = ({
                     </div>
                   )}
 
-                  {selectedTime && (
+                  {selectedTime && selectedDay && (
                     <div className="p-5">
                       <Card>
-                        <CardContent className="gap-3 p-3">
+                        <CardContent className="space-y-3 p-3">
                           <div className="flex items-start justify-between">
                             <h2 className="font-bold">
                               {barbershopService.name}
                             </h2>
                             <p className="font-bold">
-                              {barbershopService.price.toString()}
+                              {Intl.NumberFormat('pt-Br', {
+                                style: 'currency',
+                                currency: 'BRL',
+                              }).format(Number(barbershopService.price))}
                             </p>
                           </div>
                           <div className="flex items-start justify-between">
-                            <p>Data</p>
-                            <p className="font-bold">
-                              {selectedDay?.toDateString()}
+                            <p className="text-sm text-gray-400">Data</p>
+                            <p className="text-sm">
+                              {format(selectedDay, "d 'de' MMMM", {
+                                locale: ptBR,
+                              })}
                             </p>
                           </div>
                           <div className="flex items-start justify-between">
-                            <p>Horário</p>
-                            <p className="font-bold">{selectedTime}</p>
+                            <p className="text-sm text-gray-400">Horário</p>
+                            <p className="text-sm">{selectedTime}</p>
                           </div>
                           <div className="flex items-start justify-between">
-                            <p>Barbearia</p>
-                            <p className="font-bold">
-                              {barbershopService.name}
-                            </p>
+                            <p className="text-sm text-gray-400">Barbearia</p>
+                            <p className="text-sm">{barbershop.name}</p>
                           </div>
                         </CardContent>
                       </Card>
+                      <SheetFooter className="py-5">
+                        <SheetClose asChild>
+                          <Button
+                            onClick={() => handleSubmit()}
+                            type="submit"
+                            className="w-full"
+                          >
+                            Confirmar
+                          </Button>
+                        </SheetClose>
+                      </SheetFooter>
                     </div>
                   )}
                 </SheetContent>
