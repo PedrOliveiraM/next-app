@@ -102,19 +102,19 @@ const SidebarSheet = () => {
       {/** MEMU RAPIDO */}
       <div className="flex flex-col gap-3 border-b border-solid py-6">
         {listQuickSearch.map((option) => (
-          <Button
-            key={option.title}
-            className="justify-start gap-3"
-            variant={'ghost'}
-          >
-            <Image
-              src={option.imageUrl}
-              alt={option.title}
-              width={18}
-              height={18}
-            />
-            {option.title}
-          </Button>
+          <SheetClose key={option.title} asChild>
+            <Button asChild className="justify-start gap-3" variant={'ghost'}>
+              <Link href={`/barbershop?service=${option.title}`}>
+                <Image
+                  src={option.imageUrl}
+                  alt={option.title}
+                  width={18}
+                  height={18}
+                />
+                {option.title}
+              </Link>
+            </Button>
+          </SheetClose>
         ))}
       </div>
 

@@ -6,6 +6,7 @@ import Search from './_components/search'
 import { Button } from './_components/ui/button'
 import { listQuickSearch } from './_constants/quick-search'
 import { db } from './_lib/prisma'
+import Link from 'next/link'
 
 const Home = async () => {
   const barbershops = await db.barbershop.findMany({})
@@ -29,14 +30,21 @@ const Home = async () => {
         {/** Buttons */}
         <div className="mt-6 flex items-center gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {listQuickSearch.map((option) => (
-            <Button key={option.title} className="gap-2" variant={'secondary'}>
-              <Image
-                src={option.imageUrl}
-                alt={option.title}
-                width={16}
-                height={16}
-              />
-              {option.title}
+            <Button
+              key={option.title}
+              className="gap-2"
+              variant={'secondary'}
+              asChild
+            >
+              <Link href={`/barbershop?service=${option.title}`}>
+                <Image
+                  src={option.imageUrl}
+                  alt={option.title}
+                  width={16}
+                  height={16}
+                />
+                {option.title}
+              </Link>
             </Button>
           ))}
         </div>

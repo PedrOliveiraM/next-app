@@ -11,10 +11,10 @@ import { Input } from './ui/input'
 // vou componentizar a barra de pesquisa
 const Search = () => {
   const formSchema = z.object({
-    search: z
+    title: z
       .string()
       .min(2, {
-        message: 'Digite um nome para buscar',
+        message: 'Digite algo para buscar',
       })
       .trim(),
   })
@@ -22,14 +22,14 @@ const Search = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      search: '',
+      title: '',
     },
   })
 
   const router = useRouter()
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push(`/barbershop?search=${values.search}`)
+    router.push(`/barbershop?title=${values.title}`)
   }
 
   return (
@@ -37,7 +37,7 @@ const Search = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2">
         <FormField
           control={form.control}
-          name="search"
+          name="title"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
