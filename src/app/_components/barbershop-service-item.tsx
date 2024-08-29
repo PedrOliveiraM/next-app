@@ -18,6 +18,7 @@ import {
   SheetHeader,
   SheetTrigger,
 } from './ui/sheet'
+import { useSession } from 'next-auth/react'
 
 interface BarbershopServiceItemProps {
   barbershopService: BarbershopServices
@@ -47,10 +48,14 @@ const BarbershopServiceItem = ({
   barbershopService,
   barbershop,
 }: BarbershopServiceItemProps) => {
-  // const { data } = useSession()
+  const { data } = useSession()
+
+  console.log({ data })
+
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
   )
+
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
 
   /* SELECIONAR A HORA */
@@ -77,7 +82,8 @@ const BarbershopServiceItem = ({
 
       await createBooking({
         serviceId: barbershopService.id,
-        userId: 'clzx7w4zt0001c1rv29zkk97f',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        userId: (data?.user as any).id,
         date: newDate,
       })
       toast.success('Reserva criada com sucesso')

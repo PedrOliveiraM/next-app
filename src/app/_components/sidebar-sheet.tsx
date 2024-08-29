@@ -47,7 +47,6 @@ const SidebarSheet = () => {
         <div className="flex items-center gap-3 border-b border-solid py-5">
           <div className="flex w-full items-center justify-between">
             <h2 className="text-lg font-bold">Olá. Faça seu login!</h2>
-
             <Dialog>
               <DialogTrigger asChild>
                 <Button size={'icon'}>
@@ -77,10 +76,6 @@ const SidebarSheet = () => {
               </DialogContent>
             </Dialog>
           </div>
-
-          {/*
-        
-        */}
         </div>
       )}
       {/** MEMU INICIAL */}
